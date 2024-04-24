@@ -42,7 +42,7 @@ class CityController extends Controller
 
         $apiKey = env('WEATHER_API_KEY');
         $url = "https://api.openweathermap.org/data/2.5/weather";
-        // dd($cityName, $apiKey, $url);
+
         try {
             $response = Http::get($url, [
                 'appid' => $apiKey,
@@ -50,7 +50,7 @@ class CityController extends Controller
                 'units' => 'imperial',
                 'lang'  => 'es'
             ]);
-            // dd($response);
+
             if ($response->successful()) {
                 return $response->json();
             } else {
