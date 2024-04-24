@@ -5,6 +5,7 @@ use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 class CityController extends Controller
 {
     /**
@@ -32,6 +33,34 @@ class CityController extends Controller
         }
     }
 
+    public function getWeatherByCity($city_id){
+        $cityName = $city_id;
+        
+        if (empty($cityName)) {
+            return response()->json(['error' => 'Debe proporcionar el nombre de una ciudad.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $apiKey = env('WEATHER_API_KEY');
+        $url = "https://api.openweathermap.org/data/2.5/weather";
+        // dd($cityName, $apiKey, $url);
+        try {
+            $response = Http::get($url, [
+                'appid' => $apiKey,
+                'q'     => $cityName,
+                'units' => 'imperial',
+                'lang'  => 'es'
+            ]);
+            // dd($response);
+            if ($response->successful()) {
+                return $response->json();
+            } else {
+                return response()->json(['error' => 'Error al obtener los datos meteorológicos.'], Response::HTTP_BAD_REQUEST);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching cities: ' . $e->getMessage());
+            return response()->json(['error' => 'Error al conectar con la API de Weather: '], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -22,6 +22,7 @@ Route::get('/countries/{country}/cities', [CityController::class, 'index']);
 Route::get('/currencies', [CurrencyController::class, 'index']);
 Route::get('/queries_history', [QueriesHistoryController::class, 'index']);
 Route::post('/save_history', [QueriesHistoryController::class, 'store']);
+Route::get('/weather/{cityName}', [CityController::class, 'getWeatherByCity']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
