@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Currency;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
 
 class CurrencyController extends Controller
 {
