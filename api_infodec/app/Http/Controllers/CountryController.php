@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use Illuminate\Database\QueryException;
-
+use Illuminate\Support\Facades\Log;
+use Exception;
 class CountryController extends Controller
 {
     /**
@@ -17,10 +18,16 @@ class CountryController extends Controller
     {
         try {
             $countries = Country::all();
+            if ($countries->isEmpty()) {
+                throw new \Exception('No se encontraron países');
+            }
             return response()->json($countries);
         } catch (QueryException $e) {
-            \Log::error('Error fetching countries: ' . $e->getMessage());
-            return response()->json(['error' => 'An unexpected error occurred. Please try again later.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            Log::error('Error al obtener los países: ' . $e->getMessage());
+            throw new \Exception('Ocurrió un error al obtener los países. Por favor, inténtelo de nuevo más tarde.');
+        } catch (Throwable $th) {
+            Log::error('Error al obtener los países: ' . $th->getMessage());
+            throw new \Exception($th->getMessage());
         }
     }
 
