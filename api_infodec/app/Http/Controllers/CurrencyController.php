@@ -13,7 +13,18 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $currencies = Currency::all();
+
+            if ($currencies->isEmpty()) {
+                throw new Exception('No se encontró moneda');
+            }
+
+            return response()->json($currencies);
+        } catch (\Throwable $th) {
+            Log::error('Error fetching currencies: ' . $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**

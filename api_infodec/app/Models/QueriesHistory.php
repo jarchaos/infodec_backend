@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class QueriesHistory extends Model
 {
     use HasFactory;
+    protected $table = 'queries_history';
     protected $fillable = ['country_id', 'city_id', 'budget', 'exchange_rate', 'converted_budget', 'date'];
 
     public function country()
