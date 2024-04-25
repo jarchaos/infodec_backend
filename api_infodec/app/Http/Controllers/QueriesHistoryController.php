@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\QueriesHistory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Validation\ValidationException;
+
 class QueriesHistoryController extends Controller
 {
     /**
@@ -50,14 +53,27 @@ class QueriesHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
-   
-        //     // Por ejemplo: QueriesHistory::create($request->all());
-        //     return response()->json(['message' => 'Query history saved successfully.'], Response::HTTP_CREATED);
-        // } catch (\Throwable $th) {
-        //     Log::error('Error storing query history: ' . $th->getMessage());
-        //     throw new Exception('An unexpected error occurred while storing query history.');
-        // }
+
+        try {
+            $validatedData = $request->validate([
+                'country_id' => 'required|integer|exists:countries,id',
+                'city_id' => 'required|integer|exists:cities,id',
+                'budget' => 'required|numeric',
+                'exchange_rate' => 'required|numeric',
+                'converted_budget' => 'required|numeric',
+            ]);
+
+
+            $queryHistory = QueriesHistory::create($validatedData);
+            return response()->json(["success"=>true,"message" => 'Historial guardado correctamente.'], Response::HTTP_CREATED);
+
+        } catch (ValidationException $ve) {
+            return response()->json(['errors' => $ve->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (\Throwable $th) {
+            Log::error('Error al guardar historial: ' . $th->getMessage());
+
+            return response()->json(["success"=>false,"message" => 'Un error inesperado ha ocurrido al intentar guardaer el historial.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

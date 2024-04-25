@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Currency;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 
@@ -20,13 +21,13 @@ class CurrencyController extends Controller
             $currencies = Currency::all();
 
             if ($currencies->isEmpty()) {
-                throw new Exception('No se encontró moneda');
+                throw new Exception('No se encontró información de moneda local');
             }
 
-            return response()->json($currencies);
+            return response()->json(["success" => true, "response"=>$currencies]);
         } catch (\Throwable $th) {
             Log::error('Error fetching currencies: ' . $th->getMessage());
-            return response()->json(['error' => $th->getMessage()], Response::HTTP_NOT_FOUND);
+            return response()->json(["success" => false, "message" => $th->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
 
