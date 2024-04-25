@@ -20,7 +20,7 @@ class QueriesHistoryController extends Controller
     public function index()
     {
         try {
-            $queriesHistory = QueriesHistory::latest()->take(5)->get();
+            $queriesHistory = QueriesHistory::with('country', 'city')->latest()->take(5)->get();
 
             if ($queriesHistory->isEmpty()) {
                 throw new \Exception('No se encontró un historial');
