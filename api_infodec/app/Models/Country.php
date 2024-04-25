@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'currency_name', 'currency_symbol'];
+    protected $fillable = ['name', 'code'];
     
     public function cities()
     {

@@ -15,10 +15,10 @@ class CountriesTableSeeder extends Seeder
     public function run()
     {
         DB::table('countries')->insert([
-            ['name' => 'Inglaterra'],
-            ['name' => 'Japón'],
-            ['name' => 'India'],
-            ['name' => 'Dinamarca']
+            ['name' => 'Inglaterra', 'code' => 'GBP'],
+            ['name' => 'Japón',      'code' => 'JPY'],
+            ['name' => 'India',      'code' => 'INR'],
+            ['name' => 'Dinamarca',  'code' => 'DKK']
         ]);
     }
 }
