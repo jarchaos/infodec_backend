@@ -48,7 +48,7 @@ class CityController extends Controller
             $response = Http::get($url, [
                 'appid' => $weatherAPIKey,
                 'q'     => $cityName,
-                'units' => 'imperial',
+                'units' => 'metric',
                 'lang'  => 'es'
             ]);
 
